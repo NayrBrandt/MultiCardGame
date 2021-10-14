@@ -9,12 +9,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CardGame
+namespace MultiCardGame
 {
     public class Deck
     {
         List<Card> cards = new List<Card>();
-        bool isEmpty;
         static Random random = new Random();
 
         public Deck() 
@@ -59,8 +58,7 @@ namespace CardGame
                 num++; // incrementer for the card numbers
             }
         }
-        
-        // Homework 1.2
+                
         //will randomly rearrange the cards, should run in linear time
         public void Shuffle() 
         {
