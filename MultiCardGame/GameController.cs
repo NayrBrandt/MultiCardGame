@@ -16,5 +16,35 @@ namespace MultiCardGame
         {
 
         }
+
+        public void Start()
+        {
+
+        }
+
+        public void Run()
+        {
+
+        }
+
+        private void Update()
+        {
+
+        }
+
+        private void AddUser()
+        {
+
+        }
+
+        private void Menu()
+        {
+
+        }
+
+        private void Restart()
+        {
+
+        }
     }
 }
