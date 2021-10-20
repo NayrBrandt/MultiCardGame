@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace MultiCardGame
 {
-    class Dealer
+    public class Dealer
     {
-        int ActiveCardsMax;
-        int goalsum;
-        Deck deck;
-        List<Card> InPlayCards;
-        bool[] SelectedCards;
-        public int score { get; }
+        protected int ActiveCardsMax;
+        protected int goalsum;
+        protected Deck deck;
+        protected List<Card> InPlayCards;
+        protected bool[] SelectedCards;
+        public int score { get; protected set; }
 
         public Dealer()
         {
@@ -19,12 +19,19 @@ namespace MultiCardGame
             ActiveCardsMax = 13;
             SelectedCards = new bool[13];
             score = 0;
+            // Play();
         }
 
-        public int Play()
+
+        // dealing out the original board of cards
+        public void Play()
         {
-            // Not sure if I need this or if it's just staying in GameController
-            return 0;
+            for(int i = 0; i < ActiveCardsMax; i++)
+            {
+                Card freshCard = deck.TakeTopCard();
+                freshCard.FlipOver();
+                InPlayCards.Add(freshCard);
+            }            
         }
 
         // Fill the board back up to however many cards should be on there
@@ -119,14 +126,26 @@ namespace MultiCardGame
             
             return validSum;
         }
+
+        // Loop through the combos on the board, return as soon as a valid combo is found
         public virtual bool CheckBoardCombos()
         {
-
-            //this one is going to be annoying, will need to loop through all the combos?
-            // can usually ignore face cards or put them in a separate array depending on game?
             bool comboCheck = false;
+            int valCard1 = 0;
+            int valCard2 = 0;
 
-
+            // I think this is n**2 time but it's only ever looping through 2x 13 elements
+            foreach(Card c in InPlayCards)
+            {
+                valCard1 = (int)System.Enum.Parse(typeof(Rank), c.Rank) + 1;
+                //starting at 1 because outside loop starts at 0 and we don't need to compare a card against itself
+                for (int i = 1; i < InPlayCards.Count; i++) 
+                {
+                    valCard2 = (int)System.Enum.Parse(typeof(Rank), InPlayCards[i].Rank) + 2;
+                    if (valCard1 + valCard2 == goalsum)
+                        comboCheck = true; break;
+                }
+            }            
             return comboCheck;
         }
         public virtual bool ValidateSelection()
