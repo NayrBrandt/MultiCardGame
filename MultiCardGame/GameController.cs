@@ -19,29 +19,36 @@ namespace MultiCardGame
             Highscores = new Dictionary<string, int>();            
         }
 
+
+        // Shows the menu to select which game, then calls Run to start the game loop
         public void Start()
         {
             Menu();
             Run();
         }
 
+
+        // calls the update function unless the game is won
         public void Run()
         {
             Console.WriteLine("Hello World");
-            
+            while (!Sharp.GameWon() && Sharp.CheckBoardCombos())
+            {
+                Update();
+            }
+                        
         }
 
+        // will be called constantly from Run while the game has not been won
         private void Update()
         {
-
             if(Sharp.GameWon())
             {
                 Console.WriteLine("Congrats, you won!\n\nWant to play again?");
                 Highscores.Add(Usernames[0], Sharp.score); 
                 Start();
             }
-
-
+            Sharp.Play();
         }
 
         private void AddUser()

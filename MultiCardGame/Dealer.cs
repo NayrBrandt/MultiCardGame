@@ -19,19 +19,34 @@ namespace MultiCardGame
             ActiveCardsMax = 13;
             SelectedCards = new bool[13];
             score = 0;
-            // Play();
+            Load();
         }
 
-
         // dealing out the original board of cards
-        public void Play()
+        protected void Load()
         {
-            for(int i = 0; i < ActiveCardsMax; i++)
+            for (int i = 0; i < ActiveCardsMax; i++)
             {
                 Card freshCard = deck.TakeTopCard();
                 freshCard.FlipOver();
                 InPlayCards.Add(freshCard);
-            }            
+            }
+        }
+
+        // Should only be 1 game loop of logic
+        public void Play()
+        {
+            if (CheckBoardCombos())
+            {
+                DisplayCards();
+                GetPlayerSelection();
+                ValidateSelection();
+                RemoveSelectedCards();
+                FillBoard();
+            }
+            else
+                Console.WriteLine("No combos left! Game Over!");
+                        
         }
 
         // Fill the board back up to however many cards should be on there
@@ -73,8 +88,8 @@ namespace MultiCardGame
         }
 
         // Flipping a toggle on Selected cards            
-        private void GetPlayerSelection()
-        {            
+        protected virtual void GetPlayerSelection()
+        {
             Console.WriteLine("Enter a number to choose");
             bool choiceWorked = false;
 
@@ -95,8 +110,7 @@ namespace MultiCardGame
         // Check if the input is a in bounds of the options given
         // Selected cards will always be the same size as the max size of the board
         private bool isValidInput(int userinput)
-        {
-            
+        {            
             bool isValid = false;
             if (userinput <= SelectedCards.Length)
                 isValid = true;
@@ -106,7 +120,7 @@ namespace MultiCardGame
 
         //check the cards that are the ones on the board based on
         //the selected cards array and add them
-        private bool IsValidSum()
+        protected bool IsValidSum()
         {            
             bool validSum = false;
             int valCard1 = 0;
@@ -139,8 +153,9 @@ namespace MultiCardGame
             {
                 valCard1 = (int)System.Enum.Parse(typeof(Rank), c.Rank) + 1;
                 //starting at 1 because outside loop starts at 0 and we don't need to compare a card against itself
-                for (int i = 1; i < InPlayCards.Count; i++) 
+                for (int i = 1; i < InPlayCards.Count-1; i++) 
                 {
+                    // GOING TO NEED A REFACTOR!!!!!
                     valCard2 = (int)System.Enum.Parse(typeof(Rank), InPlayCards[i].Rank) + 2;
                     if (valCard1 + valCard2 == goalsum)
                         comboCheck = true; break;
@@ -148,12 +163,12 @@ namespace MultiCardGame
             }            
             return comboCheck;
         }
+        //separate from valid sum because you could just be picking cards you don't want to add
         public virtual bool ValidateSelection()
-        {
-            //separate from valid sum because you could just be picking cards you don't want to add
-            bool selectCheck = false;
+        {     
 
-            return selectCheck;
+            return IsValidSum();
+            // need to override                       
         }
 
         // compares selected cards to the cards on the board

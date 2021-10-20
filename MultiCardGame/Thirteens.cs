@@ -9,9 +9,9 @@ namespace MultiCardGame
         public Thirteens()
         {
             deck = new Deck();
-            goalsum = 10;
-            ActiveCardsMax = 13;
-            SelectedCards = new bool[13];
+            goalsum = 13;
+            ActiveCardsMax = 10;
+            SelectedCards = new bool[ActiveCardsMax];
             score = 0;
         }
         public override bool CheckBoardCombos() 

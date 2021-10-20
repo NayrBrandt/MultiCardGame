@@ -9,9 +9,9 @@ namespace MultiCardGame
         public Elevens()
         {
             deck = new Deck();
-            goalsum = 10;
-            ActiveCardsMax = 13;
-            SelectedCards = new bool[13];
+            goalsum = 11;
+            ActiveCardsMax = 9;
+            SelectedCards = new bool[ActiveCardsMax];
             score = 0;
         }
         public override bool CheckBoardCombos()
