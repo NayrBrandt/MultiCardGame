@@ -9,15 +9,15 @@ namespace MultiCardGame
         int goalsum;
         Deck deck;
         List<Card> InPlayCards;
-        bool[] SelectedCardsArray;
-        int score;
+        bool[] SelectedCards;
+        public int score { get; }
 
         public Dealer()
         {
             deck = new Deck();
             goalsum = 10;
-            ActiveCardsMax = 2;
-            SelectedCardsArray = new bool[10];
+            ActiveCardsMax = 13;
+            SelectedCards = new bool[13];
             score = 0;
         }
 
@@ -26,49 +26,97 @@ namespace MultiCardGame
             // Not sure if I need this or if it's just staying in GameController
             return 0;
         }
+
+        // Fill the board back up to however many cards should be on there
         private void FillBoard()
         {
-
+            for(int i = 0; i < ActiveCardsMax; i++)
+            {
+                if (SelectedCards[i])
+                {
+                    Card newCard = deck.TakeTopCard();
+                    newCard.FlipOver();
+                    InPlayCards.Add(newCard);                    
+                }
+            }
+            ResetSelectedCards();
         }
-        private bool GameWon()
+
+        // win state is determinant on if the deck and board are both empty
+        public bool GameWon()
         {
-            // win state is determinant on if the deck and board are both empty
+            
             bool win = false;
             if (deck.Empty && InPlayCards.Count == 0)
                 win = true;
 
             return win;
         }
+
+        //this is showing the cards on the board I think
         private void DisplayCards()
         {
-            //this is showing the cards on the board I think?
             
-
+            int num = 1;
+            foreach(Card c in InPlayCards)
+            {
+                Console.WriteLine(num + " " + c.Rank + " " + c.Suit + "\n");
+                num++;
+            }
         }
+
+        // Flipping a toggle on Selected cards            
         private void GetPlayerSelection()
-        {
-            //just getting a number from the user and that's it?
+        {            
             Console.WriteLine("Enter a number to choose");
-            Console.ReadLine();
+            bool choiceWorked = false;
 
+            while (!choiceWorked)
+            {
+                int choice = Convert.ToInt16(Console.ReadLine());
+
+                if (isValidInput(choice) && !SelectedCards[choice - 1])
+                {
+                    SelectedCards[choice - 1] = true;
+                    choiceWorked = true;
+                }
+                else
+                    Console.WriteLine("Invalid selection or card already chosen");
+            }                
         }
+
+        // Check if the input is a in bounds of the options given
+        // Selected cards will always be the same size as the max size of the board
         private bool isValidInput(int userinput)
         {
-
-            //Check if the input is a correct option
+            
             bool isValid = false;
-
+            if (userinput <= SelectedCards.Length)
+                isValid = true;
 
             return isValid;
         }
+
+        //check the cards that are the ones on the board based on
+        //the selected cards array and add them
         private bool IsValidSum()
-        {
-            //check the cards that are the ones on the board based on
-            //the selected cards array and add them
+        {            
             bool validSum = false;
+            int valCard1 = 0;
+            int valCard2 = 0;
 
-
-
+            for(int i = 0; i < InPlayCards.Count; i++)
+            {
+                if (SelectedCards[i] && valCard1 == 0)
+                {
+                    valCard1 = (int)System.Enum.Parse(typeof(Rank), InPlayCards[i].Rank) + 1;
+                }
+                else
+                    valCard2 = (int)System.Enum.Parse(typeof(Rank), InPlayCards[i].Rank) + 1;
+            }
+            if (valCard1 + valCard2 == goalsum)
+                validSum = true;
+            
             return validSum;
         }
         public virtual bool CheckBoardCombos()
@@ -88,17 +136,26 @@ namespace MultiCardGame
 
             return selectCheck;
         }
+
+        // compares selected cards to the cards on the board
+        // and removes the appropriate cards
         private void RemoveSelectedCards()
         {
-            // just removes the cards 
+            for(int i = SelectedCards.Length; i > 0; i--)
+            {
+                if(SelectedCards[i])
+                {
+                    InPlayCards.RemoveAt(i);
+                }
+            }         
 
         }
         // Simply loops through the selected cards and makes them all false before the next set of selections start
-        private void ResetSelectedCardsArray()
+        private void ResetSelectedCards()
         {
-            for(int i = 0; i < SelectedCardsArray.Length; i++)
+            for(int i = 0; i < SelectedCards.Length; i++)
             {
-                SelectedCardsArray[i] = false;
+                SelectedCards[i] = false;
             }
         }
         public virtual bool ValidPair()
