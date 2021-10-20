@@ -18,7 +18,6 @@ namespace MultiCardGame
         }
         public override bool CheckBoardCombos()
         {
-            Console.WriteLine("In the Tens Checking the combos");
             return base.CheckBoardCombos();
         }
         public override bool ValidateSelection()
@@ -59,9 +58,16 @@ namespace MultiCardGame
             int numSelect = 0;
             while(numSelect < 4)
             {
+                Console.WriteLine("In the Tens Select");
                 base.GetPlayerSelection();
+                numSelect++;
                 if (numSelect == 2)
-                    if (base.ValidateSelection()) break;
+                {
+                    Console.WriteLine("In the select for two");
+                    if (base.IsValidSum())
+                    break;
+                }
+                
             }     
             
         }

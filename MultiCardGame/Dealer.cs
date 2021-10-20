@@ -14,17 +14,18 @@ namespace MultiCardGame
 
         public Dealer()
         {
-            deck = new Deck();
-            goalsum = 10;
             ActiveCardsMax = 13;
+            goalsum = 10;
+            deck = new Deck();
+            InPlayCards = new List<Card>();
             SelectedCards = new bool[13];
-            score = 0;
-            Load();
+            score = 0;            
         }
 
         // dealing out the original board of cards
         protected void Load()
         {
+            deck.Shuffle();
             for (int i = 0; i < ActiveCardsMax; i++)
             {
                 Card freshCard = deck.TakeTopCard();
@@ -82,7 +83,7 @@ namespace MultiCardGame
             int num = 1;
             foreach(Card c in InPlayCards)
             {
-                Console.WriteLine(num + " " + c.Rank + " " + c.Suit + "\n");
+                Console.WriteLine(num + " " + c.Rank + " " + c.Suit);
                 num++;
             }
         }
@@ -132,9 +133,10 @@ namespace MultiCardGame
                 {
                     valCard1 = (int)System.Enum.Parse(typeof(Rank), InPlayCards[i].Rank) + 1;
                 }
-                else
+                else if (SelectedCards[i])
                     valCard2 = (int)System.Enum.Parse(typeof(Rank), InPlayCards[i].Rank) + 1;
             }
+            Console.WriteLine("1 + 2 is: " + (valCard1 + valCard2));
             if (valCard1 + valCard2 == goalsum)
                 validSum = true;
             
@@ -147,20 +149,22 @@ namespace MultiCardGame
             bool comboCheck = false;
             int valCard1 = 0;
             int valCard2 = 0;
-
+                        
+            Console.WriteLine("Combocheck is: " + comboCheck);
             // I think this is n**2 time but it's only ever looping through 2x 13 elements
             foreach(Card c in InPlayCards)
             {
                 valCard1 = (int)System.Enum.Parse(typeof(Rank), c.Rank) + 1;
                 //starting at 1 because outside loop starts at 0 and we don't need to compare a card against itself
-                for (int i = 1; i < InPlayCards.Count-1; i++) 
+                for (int i = 0; i < InPlayCards.Count-1; i++) 
                 {
                     // GOING TO NEED A REFACTOR!!!!!
                     valCard2 = (int)System.Enum.Parse(typeof(Rank), InPlayCards[i].Rank) + 2;
                     if (valCard1 + valCard2 == goalsum)
-                        comboCheck = true; break;
+                        comboCheck = true; //break;
                 }
-            }            
+            }
+            Console.WriteLine("Combocheck is: " + comboCheck);
             return comboCheck;
         }
         //separate from valid sum because you could just be picking cards you don't want to add
@@ -175,10 +179,12 @@ namespace MultiCardGame
         // and removes the appropriate cards
         private void RemoveSelectedCards()
         {
-            for(int i = SelectedCards.Length; i > 0; i--)
+            Console.WriteLine("SELECTED LENGTH IS " + SelectedCards.Length);
+            for(int i = SelectedCards.Length-1; i > 0; i--)
             {
                 if(SelectedCards[i])
                 {
+                    Console.WriteLine("INPLAYCARDS LEN IS " + InPlayCards.Count);
                     InPlayCards.RemoveAt(i);
                 }
             }         

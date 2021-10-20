@@ -23,8 +23,7 @@ namespace MultiCardGame
         // Shows the menu to select which game, then calls Run to start the game loop
         public void Start()
         {
-            Menu();
-            Run();
+            Menu();            
         }
 
 
@@ -85,6 +84,7 @@ namespace MultiCardGame
                     case 3:
                         Console.WriteLine("Play Tens");
                         Sharp = new Tens();
+                        Run();
                         break;
                     case 4:
                         Console.WriteLine("Elevens");
