@@ -18,12 +18,11 @@ namespace MultiCardGame
         }
         public override bool CheckBoardCombos()
         {
-            return base.CheckBoardCombos();
+            return(ValidQuartets() || base.CheckBoardCombos());
         }
         public override bool ValidateSelection()
         {
-            // check if cards in play are ALL the same rank as the selected cards
-            /* THIS IS A DUMB HACKY WAY TO MAKE THIS WORK AND I WANT TO FIX IT LATER */
+            // check if cards in play are ALL the same rank as the selected cards            
             int T = 0, J = 0, Q = 0, K = 0;
             bool validFour = false;            
             for(int i = 0; i < SelectedCards.Length; i++)
@@ -50,28 +49,30 @@ namespace MultiCardGame
             if (T == 4 || J == 4 || Q == 4 || K == 4)
                 validFour = true;
 
-
+            Console.WriteLine("Is there a valid 4? " + validFour);
             return( validFour ||  base.ValidateSelection());
         }
+
+        // Overrides base Get Selection because we have to be able
+        // to select up to 4 cards for a valid selection
         protected override void GetPlayerSelection()
         {
             int numSelect = 0;
             while(numSelect < 4)
             {
-                Console.WriteLine("In the Tens Select");
                 base.GetPlayerSelection();
                 numSelect++;
                 if (numSelect == 2)
-                {
-                    Console.WriteLine("In the select for two");
-                    if (base.IsValidSum())
-                    break;
-                }
-                
-            }     
+                {             
+                    if (base.IsValidSum())                      
+                        break;                    
+                }                
+            }
+            ValidateSelection();
             
         }
-        //ValidPair() : bool <<override>>
+        
+        // Checks if there are 4 of any of the 10-value cards to remove
         public bool ValidQuartets()
         {
             bool validFour = false;
@@ -92,7 +93,7 @@ namespace MultiCardGame
                 counterQ == 4 ||
                 counterK == 4)
                 validFour = true;
-
+            // Console.WriteLine("Are there any quartets? " + validFour);
             return validFour;
         }
     }

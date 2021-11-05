@@ -30,12 +30,15 @@ namespace MultiCardGame
         // calls the update function unless the game is won
         public void Run()
         {
-            Console.WriteLine("Hello World");
+            int count = 0;
             while (!Sharp.GameWon() && Sharp.CheckBoardCombos())
             {
+                count++;
                 Update();
+                Console.WriteLine("Have gone through " + count + " loops");
             }
-                        
+            if (!Sharp.CheckBoardCombos())
+                Console.WriteLine("Oh no, no valid combos left! Game over, try again! :( ");
         }
 
         // will be called constantly from Run while the game has not been won

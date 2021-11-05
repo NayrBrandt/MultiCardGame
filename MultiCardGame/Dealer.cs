@@ -37,32 +37,18 @@ namespace MultiCardGame
         // Should only be 1 game loop of logic
         public void Play()
         {
+
             if (CheckBoardCombos())
             {
+
+                Console.WriteLine("Deck size is " + deck.Size());
+
                 DisplayCards();
                 GetPlayerSelection();
                 ValidateSelection();
-                RemoveSelectedCards();
-                FillBoard();
+                ReplaceSelectedCards();
             }
-            else
-                Console.WriteLine("No combos left! Game Over!");
                         
-        }
-
-        // Fill the board back up to however many cards should be on there
-        private void FillBoard()
-        {
-            for(int i = 0; i < ActiveCardsMax; i++)
-            {
-                if (SelectedCards[i])
-                {
-                    Card newCard = deck.TakeTopCard();
-                    newCard.FlipOver();
-                    InPlayCards.Add(newCard);                    
-                }
-            }
-            ResetSelectedCards();
         }
 
         // win state is determinant on if the deck and board are both empty
@@ -136,7 +122,7 @@ namespace MultiCardGame
                 else if (SelectedCards[i])
                     valCard2 = (int)System.Enum.Parse(typeof(Rank), InPlayCards[i].Rank) + 1;
             }
-            Console.WriteLine("1 + 2 is: " + (valCard1 + valCard2));
+            Console.WriteLine("Pair combo adds to: " + (valCard1 + valCard2));            
             if (valCard1 + valCard2 == goalsum)
                 validSum = true;
             
@@ -150,46 +136,56 @@ namespace MultiCardGame
             int valCard1 = 0;
             int valCard2 = 0;
                         
-            Console.WriteLine("Combocheck is: " + comboCheck);
             // I think this is n**2 time but it's only ever looping through 2x 13 elements
-            foreach(Card c in InPlayCards)
+            for(int i = 0; i < InPlayCards.Count; i++)
             {
-                valCard1 = (int)System.Enum.Parse(typeof(Rank), c.Rank) + 1;
-                //starting at 1 because outside loop starts at 0 and we don't need to compare a card against itself
-                for (int i = 0; i < InPlayCards.Count-1; i++) 
+                valCard1 = (int)System.Enum.Parse(typeof(Rank), InPlayCards[i].Rank) + 1;
+                //Console.WriteLine("Card 1 " + InPlayCards[i].Rank + " val is " + valCard1);                
+                for (int j = 0; j < InPlayCards.Count; j++) 
                 {
-                    // GOING TO NEED A REFACTOR!!!!!
-                    valCard2 = (int)System.Enum.Parse(typeof(Rank), InPlayCards[i].Rank) + 2;
+                    if (i == j) // Don't compare a card with itself
+                        continue;
+                    
+                    valCard2 = (int)System.Enum.Parse(typeof(Rank), InPlayCards[j].Rank) + 1;
+
                     if (valCard1 + valCard2 == goalsum)
                         comboCheck = true; //break;
                 }
-            }
-            Console.WriteLine("Combocheck is: " + comboCheck);
+            }            
             return comboCheck;
         }
         //separate from valid sum because you could just be picking cards you don't want to add
         public virtual bool ValidateSelection()
-        {     
-
-            return IsValidSum();
-            // need to override                       
-        }
-
-        // compares selected cards to the cards on the board
-        // and removes the appropriate cards
-        private void RemoveSelectedCards()
         {
-            Console.WriteLine("SELECTED LENGTH IS " + SelectedCards.Length);
-            for(int i = SelectedCards.Length-1; i > 0; i--)
-            {
-                if(SelectedCards[i])
-                {
-                    Console.WriteLine("INPLAYCARDS LEN IS " + InPlayCards.Count);
-                    InPlayCards.RemoveAt(i);
-                }
-            }         
+            // should always be overridden
+            // should not check SUM, if they made a mistake should reset and let them check again
 
+            if(!IsValidSum())
+                ResetSelectedCards();
+            return false;                                 
         }
+
+        //********************************CHANGES REMOVE AND FILLBOARD TO THIS****************
+        private void ReplaceSelectedCards()
+        {
+            // loop through, if find a match at [i], then
+            // draw, flip over, replace, in that loop through.
+            // I don't need to change this behavior as long as my selected cards
+            // array is accurate? 
+
+            for (int i = 0; i < InPlayCards.Count; i++)
+            {
+                if (SelectedCards[i])
+                {
+                    Card newCard = deck.TakeTopCard();
+                    newCard.FlipOver();
+                    InPlayCards[i] = newCard;                    
+                }
+                
+            }
+            ResetSelectedCards();
+        }
+
         // Simply loops through the selected cards and makes them all false before the next set of selections start
         private void ResetSelectedCards()
         {
@@ -197,16 +193,7 @@ namespace MultiCardGame
             {
                 SelectedCards[i] = false;
             }
-        }
-        public virtual bool ValidPair()
-        {
-            //not sure why this is separate from the other two validate functions but we'll see
-            bool goodPair = false;
-
-
-            return goodPair;
-        }
-
+        }    
 
     }
 }
