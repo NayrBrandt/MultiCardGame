@@ -1,4 +1,10 @@
-﻿using System;
+﻿/* Ryan Brandt
+ * CSC 350H
+ * Professor Hao Tang
+ * Project 1 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,6 +22,8 @@ namespace MultiCardGame
             score = 0;
             Load();
         }
+
+        // overrides the regular check of the board to also check for quartets
         public override bool CheckBoardCombos()
         {
             return(ValidQuartets() || base.CheckBoardCombos());

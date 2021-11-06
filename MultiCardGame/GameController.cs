@@ -1,4 +1,10 @@
-﻿using System;
+﻿/* Ryan Brandt
+ * CSC 350H
+ * Professor Hao Tang
+ * Project 1 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -39,6 +45,7 @@ namespace MultiCardGame
         }
 
         // will be called constantly from Run while the game has not been won
+        // This handles the logic for one cycle of gameplay
         private void Update()
         {
             Sharp.Play();
@@ -51,12 +58,16 @@ namespace MultiCardGame
             }            
         }
 
+
+        // Just adds the name so you can have a highscore recorded
         private void AddUser()
         {
             Console.WriteLine("Type in your name: \n\n");
             Usernames.Add(Console.ReadLine());
         }
 
+
+        // The menu to choose options or which game to play
         private void Menu()
         {
             int selection = 0;
@@ -108,6 +119,8 @@ namespace MultiCardGame
             }
         }
 
+
+        // quits the program
         private void Bye()
         {
             Console.WriteLine("\n\nOkay bye!\n\n");

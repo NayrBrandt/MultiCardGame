@@ -1,4 +1,10 @@
-﻿using System;
+﻿/* Ryan Brandt
+ * CSC 350H
+ * Professor Hao Tang
+ * Project 1 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,6 +22,8 @@ namespace MultiCardGame
             Load();
         }
         
+
+        // overrides base board checking to return true if any of the cards are a King
         public override bool CheckBoardCombos()
         {
             bool isKingThere = false;
@@ -26,7 +34,7 @@ namespace MultiCardGame
             return (isKingThere || base.CheckBoardCombos());
         }
 
-        // Probably just check Kings singly?
+        // Checks for kings to remove, then checks if there are pairs that add up to remove
         public override bool ValidateSelection()
         {
             ReplaceKing();           
@@ -61,7 +69,7 @@ namespace MultiCardGame
 
         
 
-        // Do I need to check individually for kings?
+        // Compares if any kings have been selected, replaces them if so
         public bool ReplaceKing()
         {
             bool foundKing = false;

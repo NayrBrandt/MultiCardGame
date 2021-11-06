@@ -1,4 +1,10 @@
-﻿using System;
+﻿/* Ryan Brandt
+ * CSC 350H
+ * Professor Hao Tang
+ * Project 1 
+ */
+
+using System;
 using System.Collections.Generic;
 
 namespace MultiCardGame
@@ -61,7 +67,7 @@ namespace MultiCardGame
             return win;
         }
 
-        //this is showing the cards on the board I think
+        // shows the cards on the board
         private void DisplayCards()
         {
             
@@ -163,7 +169,9 @@ namespace MultiCardGame
             return false;                                 
         }
 
-        //********************************CHANGES REMOVE AND FILLBOARD TO THIS****************
+        
+        // This replaces the cards that have been selected and then calls the function
+        // to reset the cards that have been selected
         protected void ReplaceSelectedCards()
         {
             // loop through, if find a match at [i], then

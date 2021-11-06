@@ -1,4 +1,10 @@
-﻿using System;
+﻿/* Ryan Brandt
+ * CSC 350H
+ * Professor Hao Tang
+ * Project 1 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,6 +22,7 @@ namespace MultiCardGame
             Load();
         }
 
+        // overrides base board checking function to also check for JQK combos
         public override bool CheckBoardCombos()
         {
             return (ValidJQK() || base.CheckBoardCombos());
