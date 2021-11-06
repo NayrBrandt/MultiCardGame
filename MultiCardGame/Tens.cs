@@ -57,6 +57,8 @@ namespace MultiCardGame
         // to select up to 4 cards for a valid selection
         protected override void GetPlayerSelection()
         {
+            Console.WriteLine("Choose a pair of cards that add up to 10");
+            Console.WriteLine("Or a combo of four Tens, Jacks, Queens, or Kings.");
             int numSelect = 0;
             while(numSelect < 4)
             {

@@ -41,7 +41,7 @@ namespace MultiCardGame
             if (CheckBoardCombos())
             {
 
-                Console.WriteLine("Deck size is " + deck.Size());
+                Console.WriteLine("There are " + deck.Size() + " cards left in the deck.");
 
                 DisplayCards();
                 GetPlayerSelection();
@@ -53,8 +53,7 @@ namespace MultiCardGame
 
         // win state is determinant on if the deck and board are both empty
         public bool GameWon()
-        {
-            
+        {            
             bool win = false;
             if (deck.Empty && InPlayCards.Count == 0)
                 win = true;
@@ -121,8 +120,7 @@ namespace MultiCardGame
                 }
                 else if (SelectedCards[i])
                     valCard2 = (int)System.Enum.Parse(typeof(Rank), InPlayCards[i].Rank) + 1;
-            }
-            Console.WriteLine("Pair combo adds to: " + (valCard1 + valCard2));            
+            }                   
             if (valCard1 + valCard2 == goalsum)
                 validSum = true;
             
@@ -166,20 +164,25 @@ namespace MultiCardGame
         }
 
         //********************************CHANGES REMOVE AND FILLBOARD TO THIS****************
-        private void ReplaceSelectedCards()
+        protected void ReplaceSelectedCards()
         {
             // loop through, if find a match at [i], then
             // draw, flip over, replace, in that loop through.
             // I don't need to change this behavior as long as my selected cards
             // array is accurate? 
 
-            for (int i = 0; i < InPlayCards.Count; i++)
+            for (int i = InPlayCards.Count-1; i >= 0; i--)
             {
                 if (SelectedCards[i])
                 {
-                    Card newCard = deck.TakeTopCard();
-                    newCard.FlipOver();
-                    InPlayCards[i] = newCard;                    
+                    if (!deck.Empty)
+                    {
+                        Card newCard = deck.TakeTopCard();
+                        newCard.FlipOver();
+                        InPlayCards[i] = newCard;
+                    }
+                    else
+                        InPlayCards.RemoveAt(i);
                 }
                 
             }

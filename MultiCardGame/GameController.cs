@@ -29,13 +29,10 @@ namespace MultiCardGame
 
         // calls the update function unless the game is won
         public void Run()
-        {
-            int count = 0;
+        {            
             while (!Sharp.GameWon() && Sharp.CheckBoardCombos())
-            {
-                count++;
-                Update();
-                Console.WriteLine("Have gone through " + count + " loops");
+            {                
+                Update();                
             }
             if (!Sharp.CheckBoardCombos())
                 Console.WriteLine("Oh no, no valid combos left! Game over, try again! :( ");
@@ -44,13 +41,14 @@ namespace MultiCardGame
         // will be called constantly from Run while the game has not been won
         private void Update()
         {
-            if(Sharp.GameWon())
+            Sharp.Play();
+
+            if (Sharp.GameWon())
             {
                 Console.WriteLine("Congrats, you won!\n\nWant to play again?");
                 Highscores.Add(Usernames[0], Sharp.score); 
                 Start();
-            }
-            Sharp.Play();
+            }            
         }
 
         private void AddUser()
@@ -92,10 +90,12 @@ namespace MultiCardGame
                     case 4:
                         Console.WriteLine("Elevens");
                         Sharp = new Elevens();
+                        Run();
                         break;
                     case 5:
                         Console.WriteLine("Thirteens");
                         Sharp = new Thirteens();
+                        Run();
                         break;
                     case 6:
                         Bye();
