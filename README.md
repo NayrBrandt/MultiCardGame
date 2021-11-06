@@ -13,8 +13,8 @@ Thirteens has a 10 card board and you can remove Kings by themself.
 
 ### Initial 
 
-![Initial UML](xxx)
+![Initial UML](Initial.png)
 
 ### Final
 
-![Final UML](xxx)
+![Final UML](Final.png)
