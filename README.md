@@ -1,6 +1,6 @@
 # MultiCardGame for CSC350H with Professor Hao Tang
 
-###Problem Statement and Background
+### Problem Statement and Background
 Using C# and and abstract base class, build out three playing card games, called Tens, Elevens, and Thirteens
 
 Each game is played by combining pairs of cards that add to the value in the name. Aces are 1, Jacks are 11, Queens 12, and Kings 13.
